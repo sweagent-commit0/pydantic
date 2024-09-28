@@ -1,24 +1,11 @@
 """Type annotations to use with `__get_pydantic_core_schema__` and `__get_pydantic_json_schema__`."""
-
 from __future__ import annotations as _annotations
-
 from typing import TYPE_CHECKING, Any, Union
-
 from pydantic_core import core_schema
-
 if TYPE_CHECKING:
     from .json_schema import JsonSchemaMode, JsonSchemaValue
-
-    CoreSchemaOrField = Union[
-        core_schema.CoreSchema,
-        core_schema.ModelField,
-        core_schema.DataclassField,
-        core_schema.TypedDictField,
-        core_schema.ComputedField,
-    ]
-
-__all__ = 'GetJsonSchemaHandler', 'GetCoreSchemaHandler'
-
+    CoreSchemaOrField = Union[core_schema.CoreSchema, core_schema.ModelField, core_schema.DataclassField, core_schema.TypedDictField, core_schema.ComputedField]
+__all__ = ('GetJsonSchemaHandler', 'GetCoreSchemaHandler')
 
 class GetJsonSchemaHandler:
     """Handler to call into the next JSON schema generation function.
@@ -26,7 +13,6 @@ class GetJsonSchemaHandler:
     Attributes:
         mode: Json schema mode, can be `validation` or `serialization`.
     """
-
     mode: JsonSchemaMode
 
     def __call__(self, core_schema: CoreSchemaOrField, /) -> JsonSchemaValue:
@@ -59,8 +45,7 @@ class GetJsonSchemaHandler:
         Returns:
             JsonSchemaValue: A JsonSchemaValue that has no `$ref`.
         """
-        raise NotImplementedError
-
+        pass
 
 class GetCoreSchemaHandler:
     """Handler to call into the next CoreSchema schema generation function."""
@@ -93,7 +78,7 @@ class GetCoreSchemaHandler:
         Returns:
             CoreSchema: The `pydantic-core` CoreSchema generated.
         """
-        raise NotImplementedError
+        pass
 
     def resolve_ref_schema(self, maybe_ref_schema: core_schema.CoreSchema, /) -> core_schema.CoreSchema:
         """Get the real schema for a `definition-ref` schema.
@@ -109,13 +94,13 @@ class GetCoreSchemaHandler:
         Returns:
             A concrete `CoreSchema`.
         """
-        raise NotImplementedError
+        pass
 
     @property
     def field_name(self) -> str | None:
         """Get the name of the closest field to this validator."""
-        raise NotImplementedError
+        pass
 
     def _get_types_namespace(self) -> dict[str, Any] | None:
         """Internal method used during type resolution for serializer annotations."""
-        raise NotImplementedError
+        pass

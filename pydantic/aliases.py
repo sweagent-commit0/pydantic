@@ -1,16 +1,10 @@
 """Support for alias configurations."""
-
 from __future__ import annotations
-
 import dataclasses
 from typing import Any, Callable, Literal
-
 from pydantic_core import PydanticUndefined
-
 from ._internal import _internal_dataclass
-
 __all__ = ('AliasGenerator', 'AliasPath', 'AliasChoices')
-
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasPath:
@@ -21,7 +15,6 @@ class AliasPath:
     Attributes:
         path: A list of string or integer aliases.
     """
-
     path: list[int | str]
 
     def __init__(self, first_arg: str, *args: str | int) -> None:
@@ -33,7 +26,7 @@ class AliasPath:
         Returns:
             The list of aliases.
         """
-        return self.path
+        pass
 
     def search_dict_for_path(self, d: dict) -> Any:
         """Searches a dictionary for the path specified by the alias.
@@ -41,17 +34,7 @@ class AliasPath:
         Returns:
             The value at the specified path, or `PydanticUndefined` if the path is not found.
         """
-        v = d
-        for k in self.path:
-            if isinstance(v, str):
-                # disallow indexing into a str, like for AliasPath('x', 0) and x='abc'
-                return PydanticUndefined
-            try:
-                v = v[k]
-            except (KeyError, IndexError, TypeError):
-                return PydanticUndefined
-        return v
-
+        pass
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasChoices:
@@ -62,7 +45,6 @@ class AliasChoices:
     Attributes:
         choices: A list containing a string or `AliasPath`.
     """
-
     choices: list[str | AliasPath]
 
     def __init__(self, first_choice: str | AliasPath, *choices: str | AliasPath) -> None:
@@ -74,14 +56,7 @@ class AliasChoices:
         Returns:
             The list of aliases.
         """
-        aliases: list[list[str | int]] = []
-        for c in self.choices:
-            if isinstance(c, AliasPath):
-                aliases.append(c.convert_to_aliases())
-            else:
-                aliases.append([c])
-        return aliases
-
+        pass
 
 @dataclasses.dataclass(**_internal_dataclass.slots_true)
 class AliasGenerator:
@@ -94,30 +69,17 @@ class AliasGenerator:
         validation_alias: A callable that takes a field name and returns a validation alias for it.
         serialization_alias: A callable that takes a field name and returns a serialization alias for it.
     """
-
     alias: Callable[[str], str] | None = None
     validation_alias: Callable[[str], str | AliasPath | AliasChoices] | None = None
     serialization_alias: Callable[[str], str] | None = None
 
-    def _generate_alias(
-        self,
-        alias_kind: Literal['alias', 'validation_alias', 'serialization_alias'],
-        allowed_types: tuple[type[str] | type[AliasPath] | type[AliasChoices], ...],
-        field_name: str,
-    ) -> str | AliasPath | AliasChoices | None:
+    def _generate_alias(self, alias_kind: Literal['alias', 'validation_alias', 'serialization_alias'], allowed_types: tuple[type[str] | type[AliasPath] | type[AliasChoices], ...], field_name: str) -> str | AliasPath | AliasChoices | None:
         """Generate an alias of the specified kind. Returns None if the alias generator is None.
 
         Raises:
             TypeError: If the alias generator produces an invalid type.
         """
-        alias = None
-        if alias_generator := getattr(self, alias_kind):
-            alias = alias_generator(field_name)
-            if alias and not isinstance(alias, allowed_types):
-                raise TypeError(
-                    f'Invalid `{alias_kind}` type. `{alias_kind}` generator must produce one of `{allowed_types}`'
-                )
-        return alias
+        pass
 
     def generate_aliases(self, field_name: str) -> tuple[str | None, str | AliasPath | AliasChoices | None, str | None]:
         """Generate `alias`, `validation_alias`, and `serialization_alias` for a field.
@@ -125,8 +87,4 @@ class AliasGenerator:
         Returns:
             A tuple of three aliases - validation, alias, and serialization.
         """
-        alias = self._generate_alias('alias', (str,), field_name)
-        validation_alias = self._generate_alias('validation_alias', (str, AliasChoices, AliasPath), field_name)
-        serialization_alias = self._generate_alias('serialization_alias', (str,), field_name)
-
-        return alias, validation_alias, serialization_alias  # type: ignore
+        pass

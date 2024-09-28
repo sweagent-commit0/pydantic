@@ -1,13 +1,10 @@
 from __future__ import annotations as _annotations
-
 from dataclasses import dataclass
 from typing import Union
-
 
 @dataclass
 class PydanticRecursiveRef:
     type_ref: str
-
     __name__ = 'PydanticRecursiveRef'
     __hash__ = object.__hash__
 
@@ -17,7 +14,7 @@ class PydanticRecursiveRef:
         """
 
     def __or__(self, other):
-        return Union[self, other]  # type: ignore
+        return Union[self, other]
 
     def __ror__(self, other):
-        return Union[other, self]  # type: ignore
+        return Union[other, self]
